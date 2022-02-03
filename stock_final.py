@@ -12,15 +12,15 @@ import scipy.stats as stats
 import datetime
 from datetime import date
 import streamlit as st
-import statsmodels.api as sm
-from statsmodels import regression
 from PIL import Image
 # In[6]:
-image= Image.open("banner.jpg")
-st.image(image,use_column_width=True)
 st.write("""
-This web app analyzes the risk and returns of any partuculat stocks in the database used. it visually analyze the time plot of the stock
-,the volatility clustering, descrption of the return, Beta , Value at Risk and Alpha of the Stock.
+## *Bearish or Bullish*?
+""")
+st.write("""
+This web app analyzes the risk and returns of any stock in the yahoo finance DB. 
+It visually analyze the time plot of the **stock**
+,the **volatility** and a **graphical description** of the daily return for that particular stock
 
 Database: Yahoo Finance
 """)
@@ -28,7 +28,6 @@ plt.style.use("bmh")
 
 ## Loading dataset
 
-#### Image ---------
 ## Enter Ticker
 st.sidebar.subheader("Company")
 ticker = st.sidebar.text_input("Ticker","AMZN")
@@ -36,7 +35,7 @@ ticker = st.sidebar.text_input("Ticker","AMZN")
 ## Select Period
 st.sidebar.subheader(" Period")
 st.sidebar.write("Enter Start and End Date")
-start_date= st.sidebar.date_input("Start date", datetime.date(2017,1,1))
+start_date= st.sidebar.date_input("Start date", datetime.date(2021,1,1))
 end_date= st.sidebar.date_input("End date", date.today())
 
 ## Loading dataset
@@ -97,5 +96,3 @@ except:
 
              If valid, Consider Using a more recent start date for the Ticker you are trying to Analyze(e.g 2019/01/01) to View the Beta, Value at Risk and Alpha Value of the stock.
              """)    
-
-

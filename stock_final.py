@@ -134,7 +134,8 @@ except:
              If valid, Consider Using a more recent start date for the Ticker you are trying to Analyze(e.g 2019/01/01) to View the Beta, Value at Risk and Alpha Value of the stock.
              """)   
 
-
+## use st.form as a tool to make sure both tickers
+##  are selected before the page is run
 
 ## The cumulative returns of a stock
 t1 = st.text_input("Choose the first ticker" , ticker)
@@ -152,7 +153,33 @@ if len(ticker_lst) > 0:
     st.line_chart(df) 
 
 st.subheader("Candle Stick Chart for " + str(ticker))
+st.write("""
+Candlestick charts are a technical tool that packs data for multiple time 
+frames into single price bars. 
+This makes them more useful than traditional open-high, low-close bars or simple lines that connect the dots of closing prices. 
+Candlesticks build patterns that predict price direction once completed.
+""")
+
 fig1 = go.Figure(data = go.Candlestick(x = pd.date_range(start = start_date , end = end_date), 
 open = stock["Open"] , high = stock["High"],
 low = stock["Low"], close = stock["Close"]))
 st.plotly_chart(fig1)
+
+st.markdown("""---""")
+st.write("## Done by: Usman Siddiqui")
+st.write("""
+This was designed for an onboarding project as part of my 1 year Internship
+in Silicon Valley as a Data Science intern at an EV battery firm, Cuberg Inc
+""")
+st.write("""
+Credits to *Kyle Mcentush* for input in improving the Web app overtime
+""")
+
+## To-do
+## 1. All plotly 
+## 2. Cache more functions using experimental memo
+## 3. add args to fetch and clean be start date and end date (all inputs)
+## 4. st.form 
+## 5. Multiple pages to present mini apps
+## 6. Design changes: navigation on the sidebar 
+##                    add start, end date and ticker in the same row using st.columms

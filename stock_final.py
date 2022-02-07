@@ -82,8 +82,20 @@ try:
     st.write("The Open price is the first price traded in a given time period and the last price traded is the Close Price. The High and Low can happen any time in-between these two extremes.")
     st.write("OHLC for the past 5 days") 
     st.dataframe(stock.tail(5).sort_index(ascending=False))
+    @st.cache
+    def convert_df(df):
+        return df.to_csv().encode('utf-8')
 
-    ## Candle stick plot
+
+    csv = convert_df(stock.tail(5).sort_index(ascending=False))
+
+    st.download_button(
+    "Press to Download",
+    csv,
+    "file.csv",
+    "text/csv",
+    key='download-csv'
+    )
 
 
 

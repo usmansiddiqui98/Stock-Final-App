@@ -10,9 +10,11 @@ from yahoofinancials import YahooFinancials
 import yfinance as yf
 import scipy.stats as stats
 import datetime
-from datetime import date
+from datetime import date,timedelta
 import streamlit as st
 from PIL import Image
+import plotly.graph_objects as go
+
 # In[6]:
 st.write("""
 ## *Bearish or Bullish*?
@@ -53,13 +55,20 @@ end_date= st.sidebar.date_input("End date", date.today())
 
 ## Loading dataset
 try:
-    stock = yf.download(ticker,start =start_date,end=end_date)
+    @st.experimental_memo
+    def fetch_and_clean_data(ticker):
+        stock = yf.download(ticker,start =start_date,end=end_date)
+        return stock
+    if len(ticker)>0:
+        stock = fetch_and_clean_data(ticker)
+
     stockinfo = yf.Ticker(ticker)
 
     share = YahooFinancials('AAPL')
 
     # Benchmark index is S&P 500
     benchmark = yf.download("SPY",start =start_date,end=end_date)
+
 
     ## Company _Name
     company_name =stockinfo.info["longName"]
@@ -73,6 +82,9 @@ try:
     st.write("The Open price is the first price traded in a given time period and the last price traded is the Close Price. The High and Low can happen any time in-between these two extremes.")
     st.write("OHLC for the past 5 days") 
     st.dataframe(stock.tail(5).sort_index(ascending=False))
+
+    ## Candle stick plot
+
 
 
     ### Time plot
@@ -102,10 +114,33 @@ try:
     plt.ylabel("Frequncy")
     ax.hist(returns, bins =100,histtype='stepfilled')
     st.pyplot(fig)
+
+
     
 except:
     st.write("""
              The ticker you entered is invalid.
 
              If valid, Consider Using a more recent start date for the Ticker you are trying to Analyze(e.g 2019/01/01) to View the Beta, Value at Risk and Alpha Value of the stock.
-             """)    
+             """)   
+
+## The cumulative returns of a stock
+t1 = st.text_input("Choose the first ticker" , ticker)
+t2 = st.text_input("Choose the second ticker" , "")
+ticker_lst = [t1,t2]
+def relativeret(df):
+    rel = df.pct_change()
+    cumret = (1+rel).cumprod() - 1
+    cumret = cumret.fillna(0)
+    return cumret
+
+if len(ticker_lst) > 0:
+    df = relativeret(yf.download(ticker_lst,start_date,end_date)['Adj Close'])
+    st.subheader("Cumulative returns of the Closing Price for " + str(ticker) + " and " + str(t2))
+    st.line_chart(df) 
+
+st.subheader("Candle Stick Chart for " + str(ticker))
+fig1 = go.Figure(data = go.Candlestick(x = pd.date_range(start = start_date , end = end_date), 
+open = stock["Open"] , high = stock["High"],
+low = stock["Low"], close = stock["Close"]))
+st.plotly_chart(fig1)

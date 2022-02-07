@@ -41,19 +41,17 @@ start_date= st.sidebar.date_input("Start date", datetime.date(2021,1,1))
 end_date= st.sidebar.date_input("End date", date.today())
 ### Try to cache company information with arg to fn being the ticker
 
-#def dl_fin(ticker,about,date):
-# make 2 fucntions
 ## 1st fn for the ticker info
 ## 2nd fn would be for date related info
 ## Cache both separately 
-## catch error in the cache 
-## have a different return value to make it known in the main fn
-## Try with plotly...cumulative returns 
-## Add a download button for the df would be as a csv (st.download())
-## Add cumulative returns against a benchmark
+## catch error in the cache (how??)
+## Try with plotly...cumulative returns (done)
+## Add a download button for the df would be as a csv (st.download()) (done)
+## Add cumulative returns against a benchmark (done)
 ## st.mulitple_select??
 
-## Loading dataset
+
+
 try:
     @st.experimental_memo
     def fetch_and_clean_data(ticker):
@@ -82,7 +80,9 @@ try:
     st.write("The Open price is the first price traded in a given time period and the last price traded is the Close Price. The High and Low can happen any time in-between these two extremes.")
     st.write("OHLC for the past 5 days") 
     st.dataframe(stock.tail(5).sort_index(ascending=False))
-    @st.cache
+
+
+    @st.experimental_memo
     def convert_df(df):
         return df.to_csv().encode('utf-8')
 
@@ -126,8 +126,6 @@ try:
     plt.ylabel("Frequncy")
     ax.hist(returns, bins =100,histtype='stepfilled')
     st.pyplot(fig)
-
-
     
 except:
     st.write("""
@@ -135,6 +133,8 @@ except:
 
              If valid, Consider Using a more recent start date for the Ticker you are trying to Analyze(e.g 2019/01/01) to View the Beta, Value at Risk and Alpha Value of the stock.
              """)   
+
+
 
 ## The cumulative returns of a stock
 t1 = st.text_input("Choose the first ticker" , ticker)

@@ -1,6 +1,6 @@
 import streamlit as st
 from multiapp import MultiApp
-from apps import home, stock_final # import your application pages here
+from apps import home, stock_final  # import your application pages here
 
 app = MultiApp()
 

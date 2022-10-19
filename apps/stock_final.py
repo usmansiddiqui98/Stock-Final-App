@@ -1,19 +1,9 @@
-
-# In[109]:
-from zmq import get_includes
-import numpy as np
 import pandas as pd
-import html5lib
-import bs4
-import seaborn as sns
 import matplotlib.pyplot as plt
-from yahoofinancials import YahooFinancials
 import yfinance as yf
-import scipy.stats as stats
 import datetime
-from datetime import date,timedelta
+from datetime import date
 import streamlit as st
-from PIL import Image
 import plotly.graph_objects as go
 
 # In[6]:
